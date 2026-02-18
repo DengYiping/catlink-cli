@@ -1,0 +1,475 @@
+version = 1
+revision = 3
+requires-python = ">=3.13"
+
+[[package]]
+name = "anyio"
+version = "4.12.1"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "idna" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/96/f0/5eb65b2bb0d09ac6776f2eb54adee6abe8228ea05b20a5ad0e4945de8aac/anyio-4.12.1.tar.gz", hash = "md5:10e3ba7d02402b6605d834a1e4881a1d" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/38/0e/27be9fdef66e72d64c0cdc3cc2823101b80585f8119b5c112c2e8f5f7dab/anyio-4.12.1-py3-none-any.whl", hash = "md5:2ef04e7c3e1747f5e5f2bc22722bcd06" },
+]
+
+[[package]]
+name = "black"
+version = "26.1.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "click" },
+    { name = "mypy-extensions" },
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "platformdirs" },
+    { name = "pytokens" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/13/88/560b11e521c522440af991d46848a2bde64b5f7202ec14e1f46f9509d328/black-26.1.0.tar.gz", hash = "md5:f15c4116e75ec42b603f94352c852b18" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/79/04/fa2f4784f7237279332aa735cdfd5ae2e7730db0072fb2041dadda9ae551/black-26.1.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "md5:889accfae3871045a12f45bc40cdc1ab" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cf/ad/5a131b01acc0e5336740a039628c0ab69d60cf09a2c87a4ec49f5826acda/black-26.1.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "md5:d0b84430746b2593e4075ceea9402244" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/da/7c/b05f22964316a52ab6b4265bcd52c0ad2c30d7ca6bd3d0637e438fc32d6e/black-26.1.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "md5:2007b52cc3be5fa5ab48d23ff438ec13" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a6/a3/e8d1526bea0446e040193185353920a9506eab60a7d8beb062029129c7d2/black-26.1.0-cp313-cp313-win_amd64.whl", hash = "md5:69e755e0ce9f7ae9e0e24faf05ad03c6" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c7/5a/d62ebf4d8f5e3a1daa54adaab94c107b57be1b1a2f115a0249b41931e188/black-26.1.0-cp313-cp313-win_arm64.whl", hash = "md5:f574e1897374a10c3183e8f0f8a0fa0c" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/6a/83/be35a175aacfce4b05584ac415fd317dd6c24e93a0af2dcedce0f686f5d8/black-26.1.0-cp314-cp314-macosx_10_15_x86_64.whl", hash = "md5:3bf5d358ae4554aa341fe92d3f49330f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a5/f5/d33696c099450b1274d925a42b7a030cd3ea1f56d72e5ca8bbed5f52759c/black-26.1.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "md5:629693f6030a4c40af0877fad8297b16" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/1b/87/670dd888c537acb53a863bc15abbd85b22b429237d9de1b77c0ed6b79c42/black-26.1.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "md5:b0ae6cdf393f38df4ab71ddec885ce31" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/fe/9c/cd3deb79bfec5bcf30f9d2100ffeec63eecce826eb63e3961708b9431ff1/black-26.1.0-cp314-cp314-win_amd64.whl", hash = "md5:0b54b26c5095c76fd9b6acf83753e7a2" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/4e/29/f3be41a1cf502a283506f40f5d27203249d181f7a1a2abce1c6ce188035a/black-26.1.0-cp314-cp314-win_arm64.whl", hash = "md5:1310b29d88553506db5041a955724a9d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e4/3d/51bdb3ecbfadfaf825ec0c75e1de6077422b4afa2091c6c9ba34fbfc0c2d/black-26.1.0-py3-none-any.whl", hash = "md5:22a4caae74ead925a43af429533a2543" },
+]
+
+[[package]]
+name = "catlink-cli"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "click" },
+    { name = "cryptography" },
+    { name = "httpx" },
+    { name = "keyring" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "black" },
+    { name = "pytest" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", specifier = ">=8.3.1" },
+    { name = "cryptography", specifier = ">=46.0.4" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "keyring", specifier = ">=25.7.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = ">=23.11.0" },
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "ruff", specifier = ">=0.4.0" },
+]
+
+[[package]]
+name = "certifi"
+version = "2026.1.4"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/e0/2d/a891ca51311197f6ad14a7ef42e2399f36cf2f9bd44752b3dc4eab60fdc5/certifi-2026.1.4.tar.gz", hash = "md5:d8447ad858fa15af16f91e32f182aa85" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e6/ad/3cc14f097111b4de0040c83a525973216457bbeeb63739ef1ed275c1c021/certifi-2026.1.4-py3-none-any.whl", hash = "md5:1dab98768140ad2d8dbc9be8f14a2af9" },
+]
+
+[[package]]
+name = "cffi"
+version = "2.0.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "pycparser", marker = "implementation_name != 'PyPy'" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/eb/56/b1ba7935a17738ae8453301356628e8147c79dbb825bcbc73dc7401f9846/cffi-2.0.0.tar.gz", hash = "md5:5e897f6251e614f6bd128a73e81801a4" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/4b/8d/a0a47a0c9e413a658623d014e91e74a50cdd2c423f7ccfd44086ef767f90/cffi-2.0.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "md5:4dbc4c05c8367d22455a2410de9029fa" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/4a/d2/a6c0296814556c68ee32009d9c2ad4f85f2707cdecfd7727951ec228005d/cffi-2.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "md5:1a156c9a4dfd86969832e031f956ff69" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b0/1e/d22cc63332bd59b06481ceaac49d6c507598642e2230f201649058a7e704/cffi-2.0.0-cp313-cp313-manylinux1_i686.manylinux2014_i686.manylinux_2_17_i686.manylinux_2_5_i686.whl", hash = "md5:52443d6ebf373b1f832fc07e0df2e8f3" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a9/f5/a2c23eb03b61a0b8747f211eb716446c826ad66818ddc7810cc2cc19b3f2/cffi-2.0.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:eecf3f20a9cc25a47f654e0ce3981ece" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/f2/7f/e6647792fc5850d634695bc0e6ab4111ae88e89981d35ac269956605feba/cffi-2.0.0-cp313-cp313-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "md5:6c2fe9e0627dc3dfb69ac9f3ee67a808" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cb/1e/a5a1bd6f1fb30f22573f76533de12a00bf274abcdc55c8edab639078abb6/cffi-2.0.0-cp313-cp313-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "md5:2ad0b54325228505363c7a6536ef5fb8" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/98/df/0a1755e750013a2081e863e7cd37e0cdd02664372c754e5560099eb7aa44/cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:46c48c8a80e0c29868c77150c85a4c48" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/50/e1/a969e687fcf9ea58e6e2a928ad5e2dd88cc12f6f0ab477e9971f2309b57c/cffi-2.0.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "md5:5d67b66033a3591a89f0da4e1c6bf3b5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/36/54/0362578dd2c9e557a28ac77698ed67323ed5b9775ca9d3fe73fe191bb5d8/cffi-2.0.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "md5:200eb138226458357003298eb7fcb520" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/eb/6d/bf9bda840d5f1dfdbf0feca87fbdb64a918a69bca42cfa0ba7b137c48cb8/cffi-2.0.0-cp313-cp313-win32.whl", hash = "md5:e60e434b56b5e4cd4af2a7d43f001baf" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/37/18/6519e1ee6f5a1e579e04b9ddb6f1676c17368a7aba48299c3759bbc3c8b3/cffi-2.0.0-cp313-cp313-win_amd64.whl", hash = "md5:7b6c292671a5e7aa571756b6a21aedcc" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cb/0e/02ceeec9a7d6ee63bb596121c2c8e9b3a9e150936f4fbef6ca1943e6137c/cffi-2.0.0-cp313-cp313-win_arm64.whl", hash = "md5:3c09afa523452047bdc0dce0108145cf" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/92/c4/3ce07396253a83250ee98564f8d7e9789fab8e58858f35d07a9a2c78de9f/cffi-2.0.0-cp314-cp314-macosx_10_13_x86_64.whl", hash = "md5:ca64206a82449b861f173d291f16834c" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/59/dd/27e9fa567a23931c838c6b02d0764611c62290062a6d4e8ff7863daf9730/cffi-2.0.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "md5:36c8d9308a055343f8cd7c016ae762b5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d6/43/0e822876f87ea8a4ef95442c3d766a06a51fc5298823f884ef87aaad168c/cffi-2.0.0-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:198a8656d47bf596c941de2a39e4932f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b4/89/76799151d9c2d2d1ead63c2429da9ea9d7aac304603de0c6e8764e6e8e70/cffi-2.0.0-cp314-cp314-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "md5:27a516cf842d81e3ba7136851cf95cd9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/bb/dd/3465b14bb9e24ee24cb88c9e3730f6de63111fffe513492bf8c808a3547e/cffi-2.0.0-cp314-cp314-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "md5:6cb8ccc3c12afc1183352957b022ec26" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/47/d9/d83e293854571c877a92da46fdec39158f8d7e68da75bf73581225d28e90/cffi-2.0.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:5b4d34a03a626af3652040a33d174c79" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2b/0f/1f177e3683aead2bb00f7679a16451d302c436b5cbf2505f0ea8146ef59e/cffi-2.0.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "md5:7855b4bea2aad4b830f027ee14ab6608" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c6/0f/cafacebd4b040e3119dcb32fed8bdef8dfe94da653155f9d0b9dc660166e/cffi-2.0.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "md5:e1db21982264fbaa9b4db929a1a82493" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/3e/aa/df335faa45b395396fcbc03de2dfcab242cd61a9900e914fe682a59170b1/cffi-2.0.0-cp314-cp314-win32.whl", hash = "md5:7e17afc9b139a54d5c863cf598f6badf" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/bb/92/882c2d30831744296ce713f0feb4c1cd30f346ef747b530b5318715cc367/cffi-2.0.0-cp314-cp314-win_amd64.whl", hash = "md5:5d2f147c51da96a30b8fe388a44574ff" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/9f/2c/98ece204b9d35a7366b5b2c6539c350313ca13932143e79dc133ba757104/cffi-2.0.0-cp314-cp314-win_arm64.whl", hash = "md5:9a97aff5d486163e2367916371b5fd33" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/3e/61/c768e4d548bfa607abcda77423448df8c471f25dbe64fb2ef6d555eae006/cffi-2.0.0-cp314-cp314t-macosx_10_13_x86_64.whl", hash = "md5:8851d2c9fb4054d67557178dc06157de" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2c/ea/5f76bce7cf6fcd0ab1a1058b5af899bfbef198bea4d5686da88471ea0336/cffi-2.0.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "md5:84c5b0eacdda18c8b7135a671e068cc5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/be/b4/c56878d0d1755cf9caa54ba71e5d049479c52f9e4afc230f06822162ab2f/cffi-2.0.0-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:9e3fff93f9feb8eb6c0f15a5df7bb034" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e0/0d/eb704606dfe8033e7128df5e90fee946bbcb64a04fcdaa97321309004000/cffi-2.0.0-cp314-cp314t-manylinux2014_ppc64le.manylinux_2_17_ppc64le.whl", hash = "md5:fc0794d6254ff6367e021ff45756d6e8" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d8/19/3c435d727b368ca475fb8742ab97c9cb13a0de600ce86f62eab7fa3eea60/cffi-2.0.0-cp314-cp314t-manylinux2014_s390x.manylinux_2_17_s390x.whl", hash = "md5:62ba46baac4a6593727f2eb86b771a9b" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d0/44/681604464ed9541673e486521497406fadcc15b5217c3e326b061696899a/cffi-2.0.0-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:3e89d68cf849f1a28baa3df8d20b2455" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/25/8e/342a504ff018a2825d395d44d63a767dd8ebc927ebda557fecdaca3ac33a/cffi-2.0.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "md5:933e3212f81a6869fc6218973050801f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e1/5e/b666bacbbc60fbf415ba9988324a132c9a7a0448a9a8f125074671c0f2c3/cffi-2.0.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "md5:6612d8999ac4c4e970daada557518f76" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a0/1d/ec1a60bd1a10daa292d3cd6bb0b359a81607154fb8165f3ec95fe003b85c/cffi-2.0.0-cp314-cp314t-win32.whl", hash = "md5:1c85fea7df353165511f0e30cecc7538" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/bf/41/4c1168c74fac325c0c8156f04b6749c8b6a8f405bbf91413ba088359f60d/cffi-2.0.0-cp314-cp314t-win_amd64.whl", hash = "md5:dfe7f3dbdf13150e2434b45bfc7c1830" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/ae/3a/dbeec9d1ee0844c679f6bb5d6ad4e9f198b1224f4e7a32825f47f6192b0c/cffi-2.0.0-cp314-cp314t-win_arm64.whl", hash = "md5:4498d58516c32853b621176912546c05" },
+]
+
+[[package]]
+name = "click"
+version = "8.3.1"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/3d/fa/656b739db8587d7b5dfa22e22ed02566950fbfbcdc20311993483657a5c0/click-8.3.1.tar.gz", hash = "md5:5f89d725a424b101607ec40927f78773" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/98/78/01c019cdb5d6498122777c1a43056ebb3ebfeef2076d9d026bfe15583b2b/click-8.3.1-py3-none-any.whl", hash = "md5:f032502934a5979330da77e3f09d889c" },
+]
+
+[[package]]
+name = "colorama"
+version = "0.4.6"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "md5:11fe1cbf8299798551ac88f824ea11c4" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "md5:3fc7a89530d68d7ea231ebe779c0db9c" },
+]
+
+[[package]]
+name = "cryptography"
+version = "46.0.4"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "cffi", marker = "platform_python_implementation != 'PyPy'" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/78/19/f748958276519adf6a0c1e79e7b8860b4830dda55ccdf29f2719b5fc499c/cryptography-46.0.4.tar.gz", hash = "md5:872e86af6337b8b82f5a4d26e3b6d437" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/8d/99/157aae7949a5f30d51fcb1a9851e8ebd5c74bf99b5285d8bb4b8b9ee641e/cryptography-46.0.4-cp311-abi3-macosx_10_9_universal2.whl", hash = "md5:b22a3a1795965870d96c052b39aaaee9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/87/91/874b8910903159043b5c6a123b7e79c4559ddd1896e38967567942635778/cryptography-46.0.4-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:c8065fba90ae2da4175404a576c3c14f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c0/35/690e809be77896111f5b195ede56e4b4ed0435b428c2f2b6d35046fbb5e8/cryptography-46.0.4-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:c84ea71abd7fc677066e55e5968a533f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/1a/5b/a26407d4f79d61ca4bebaa9213feafdd8806dc69d3d290ce24996d3cfe43/cryptography-46.0.4-cp311-abi3-manylinux_2_28_aarch64.whl", hash = "md5:d8c98578f628389c416aae2907a37cc9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0c/d8/4bb7aec442a9049827aa34cee1aa83803e528fa55da9a9d45d01d1bb933e/cryptography-46.0.4-cp311-abi3-manylinux_2_28_ppc64le.whl", hash = "md5:d29e36a23c0c246167e6bd7019c9f09a" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2b/08/f83e2e0814248b844265802d081f2fac2f1cbe6cd258e72ba14ff006823a/cryptography-46.0.4-cp311-abi3-manylinux_2_28_x86_64.whl", hash = "md5:374168c5e06584b84fd77626131890f9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0a/05/19d849cf4096448779d2dcc9bb27d097457dac36f7273ffa875a93b5884c/cryptography-46.0.4-cp311-abi3-manylinux_2_31_armv7l.whl", hash = "md5:5d2292c9604b1fff3ebf4872919f9201" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e6/89/f7bac81d66ba7cde867a743ea5b37537b32b5c633c473002b26a226f703f/cryptography-46.0.4-cp311-abi3-manylinux_2_34_aarch64.whl", hash = "md5:78bded5dbd75cf29b2cfed9e9f7ef6a8" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/da/9f/7133e41f24edd827020ad21b068736e792bc68eecf66d93c924ad4719fb3/cryptography-46.0.4-cp311-abi3-manylinux_2_34_ppc64le.whl", hash = "md5:1013de2c480a90eb6918c239aaccade4" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a6/f7/6d43cbaddf6f65b24816e4af187d211f0bc536a29961f69faedc48501d8e/cryptography-46.0.4-cp311-abi3-manylinux_2_34_x86_64.whl", hash = "md5:87f29a904f548a34f45db9499f36ddad" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/9e/4f/ebd0473ad656a0ac912a16bd07db0f5d85184924e14fc88feecae2492834/cryptography-46.0.4-cp311-abi3-musllinux_1_2_aarch64.whl", hash = "md5:86a2b9635cee717ea281f4c708fd1538" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d1/f7/7923886f32dc47e27adeff8246e976d77258fd2aa3efdd1754e4e323bf49/cryptography-46.0.4-cp311-abi3-musllinux_1_2_x86_64.whl", hash = "md5:2204a716654768ea5d6f4037335dfa5e" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/eb/a7/0fca0fd3591dffc297278a61813d7f661a14243dd60f499a7a5b48acb52a/cryptography-46.0.4-cp311-abi3-win32.whl", hash = "md5:0ff8cf043bcebb1099a4370d094c05d5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2d/12/652c84b6f9873f0909374864a57b003686c642ea48c84d6c7e2c515e6da5/cryptography-46.0.4-cp311-abi3-win_amd64.whl", hash = "md5:d7be5144fcb96d0336c3921397c06896" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b9/27/542b029f293a5cce59349d799d4d8484b3b1654a7b9a0585c266e974a488/cryptography-46.0.4-cp314-cp314t-macosx_10_9_universal2.whl", hash = "md5:289285434252aea67c566f4fdf9838f6" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/f8/f5/559c25b77f40b6bf828eabaf988efb8b0e17b573545edb503368ca0a2a03/cryptography-46.0.4-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:8c50f9c5fc5df84bc28fe67ae3ba0f90" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/49/a1/551fa162d33074b660dc35c9bc3616fefa21a0e8c1edd27b92559902e408/cryptography-46.0.4-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:de47b5a29bfde8149046c2fa7cee634c" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b0/6a/4d8d129a755f5d6df1bbee69ea2f35ebfa954fa1847690d1db2e8bca46a5/cryptography-46.0.4-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "md5:668854465e40e0c8e282901aa73c4f1f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/4c/f5/ed3fcddd0a5e39321e595e144615399e47e7c153a1fb8c4862aec3151ff9/cryptography-46.0.4-cp314-cp314t-manylinux_2_28_ppc64le.whl", hash = "md5:093eda4d77fa175910595114738c5be2" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/43/ae/9f03d5f0c0c00e85ecb34f06d3b79599f20630e4db91b8a6e56e8f83d410/cryptography-46.0.4-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "md5:ac756644d7a134ed413e083719a11567" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/8b/22/e0f9f2dae8040695103369cf2283ef9ac8abe4d51f68710bec2afd232609/cryptography-46.0.4-cp314-cp314t-manylinux_2_31_armv7l.whl", hash = "md5:465935ec5be6b277053f9ec67b453742" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/01/5b/6a43fcccc51dae4d101ac7d378a8724d1ba3de628a24e11bf2f4f43cba4d/cryptography-46.0.4-cp314-cp314t-manylinux_2_34_aarch64.whl", hash = "md5:75484b19ad500e77d193046bc9f5275a" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/17/b7/0f6b8c1dd0779df2b526e78978ff00462355e31c0a6f6cff8a3e99889c90/cryptography-46.0.4-cp314-cp314t-manylinux_2_34_ppc64le.whl", hash = "md5:09ad66146920e73acd7c68364ea24cb5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/83/17/259409b8349aa10535358807a472c6a695cf84f106022268d31cea2b6c97/cryptography-46.0.4-cp314-cp314t-manylinux_2_34_x86_64.whl", hash = "md5:5e560a1f4a95106acd1da03e9340ed5d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/9c/fe/e4a1b0c989b00cee5ffa0764401767e2d1cf59f45530963b894129fd5dce/cryptography-46.0.4-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "md5:2a1fe9f128f6423e4005cd5c72db70a9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b3/81/ba8fd9657d27076eb40d6a2f941b23429a3c3d2f56f5a921d6b936a27bc9/cryptography-46.0.4-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "md5:d3be2f92bfc96441e30bd6b49bebb7c1" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/00/03/0de4ed43c71c31e4fe954edd50b9d28d658fef56555eba7641696370a8e2/cryptography-46.0.4-cp314-cp314t-win32.whl", hash = "md5:0c3adce4e710f871075d8c57199f58c4" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/5c/70/81830b59df7682917d7a10f833c4dab2a5574cd664e86d18139f2b421329/cryptography-46.0.4-cp314-cp314t-win_amd64.whl", hash = "md5:7b27520065820d5238d7d46ae2e102aa" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/56/f7/f648fdbb61d0d45902d3f374217451385edc7e7768d1b03ff1d0e5ffc17b/cryptography-46.0.4-cp38-abi3-macosx_10_9_universal2.whl", hash = "md5:549856739ab4015e072f751998916f8e" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d8/cc/8f3224cbb2a928de7298d6ed4790f5ebc48114e02bdc9559196bfb12435d/cryptography-46.0.4-cp38-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "md5:c2a44010fa3b5553674903cad049e8d6" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/17/43/4a18faa7a872d00e4264855134ba82d23546c850a70ff209e04ee200e76f/cryptography-46.0.4-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "md5:2cbbb888debbaa05f125e6d670564f77" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/ee/64/6651969409821d791ba12346a124f55e1b76f66a819254ae840a965d4b9c/cryptography-46.0.4-cp38-abi3-manylinux_2_28_aarch64.whl", hash = "md5:3b8126bfed4e723b1763bb500b8ed7dc" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/20/0b/a7fce65ee08c3c02f7a8310cc090a732344066b990ac63a9dfd0a655d321/cryptography-46.0.4-cp38-abi3-manylinux_2_28_ppc64le.whl", hash = "md5:733ebad28ba208e683496eb4fff5e5d3" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/db/a7/20c5701e2cd3e1dfd7a19d2290c522a5f435dd30957d431dcb531d0f1413/cryptography-46.0.4-cp38-abi3-manylinux_2_28_x86_64.whl", hash = "md5:52f50e73349928d30af1bfde84450cbf" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/00/dc/3e16030ea9aa47b63af6524c354933b4fb0e352257c792c4deeb0edae367/cryptography-46.0.4-cp38-abi3-manylinux_2_31_armv7l.whl", hash = "md5:8020738c149e776421763877c869750d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/42/c8/ad93f14118252717b465880368721c963975ac4b941b7ef88f3c56bf2897/cryptography-46.0.4-cp38-abi3-manylinux_2_34_aarch64.whl", hash = "md5:7641e111ad7ca0150a32b998324a7b87" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/00/cf/89c99698151c00a4631fbfcfcf459d308213ac29e321b0ff44ceeeac82f1/cryptography-46.0.4-cp38-abi3-manylinux_2_34_ppc64le.whl", hash = "md5:eba6ec709dfc63d6a48ea520a4bf25ad" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/03/c3/c90a2cb358de4ac9309b26acf49b2a100957e1ff5cc1e98e6c4996576710/cryptography-46.0.4-cp38-abi3-manylinux_2_34_x86_64.whl", hash = "md5:5d25865657f9731f213ebe106ffe972d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/96/2c/8d7f4171388a10208671e181ca43cdc0e596d8259ebacbbcfbd16de593da/cryptography-46.0.4-cp38-abi3-musllinux_1_2_aarch64.whl", hash = "md5:14cf805963ddddbbe989828aea72f8c0" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e9/23/cbb2036e450980f65c6e0a173b73a56ff3bccd8998965dea5cc9ddd424a5/cryptography-46.0.4-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "md5:df7548f5bbd68ed7d52169e924926a88" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0a/21/f7433d18fe6d5845329cbdc597e30caf983229c7a245bcf54afecc555938/cryptography-46.0.4-cp38-abi3-win32.whl", hash = "md5:fbc4951de7dd6638e11ed10cbe051155" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/3a/6a/bd2e7caa2facffedf172a45c1a02e551e6d7d4828658c9a245516a598d94/cryptography-46.0.4-cp38-abi3-win_amd64.whl", hash = "md5:14f764a4773ff37462df1f999559405a" },
+]
+
+[[package]]
+name = "h11"
+version = "0.16.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", hash = "md5:af51401a776fd654cfd98a197af9f21f" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", hash = "md5:ab5835960dca6f63c9317c218f646e66" },
+]
+
+[[package]]
+name = "httpcore"
+version = "1.0.9"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "certifi" },
+    { name = "h11" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/06/94/82699a10bca87a5556c9c59b5963f2d039dbd239f25bc2a63907a05a14cb/httpcore-1.0.9.tar.gz", hash = "md5:5157e7240632c2984cfda1f7ac54dfc7" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl", hash = "md5:146bed42feef3884ed52b749db3b02ae" },
+]
+
+[[package]]
+name = "httpx"
+version = "0.28.1"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "anyio" },
+    { name = "certifi" },
+    { name = "httpcore" },
+    { name = "idna" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "md5:774cf32b9cd94a44189fbe5871026664" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "md5:7cb326b464b75a04aa57954631097aa4" },
+]
+
+[[package]]
+name = "idna"
+version = "3.11"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/6f/6d/0703ccc57f3a7233505399edb88de3cbd678da106337b9fcde432b65ed60/idna-3.11.tar.gz", hash = "md5:9a9c33db960e0d35cc5b257c37dabeff" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl", hash = "md5:9a707ac0a65f018883cff8e82f48314e" },
+]
+
+[[package]]
+name = "iniconfig"
+version = "2.3.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz", hash = "md5:5c1d9c21275feb3da71400bf716edd72" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl", hash = "md5:d3e156a9abd59ac8b5eb0c2e8b1c5dad" },
+]
+
+[[package]]
+name = "jaraco-classes"
+version = "3.4.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "more-itertools" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/06/c0/ed4a27bc5571b99e3cff68f8a9fa5b56ff7df1c2251cc715a652ddd26402/jaraco.classes-3.4.0.tar.gz", hash = "md5:994fb3f2ce9bb538ca6e8abf6ebbdf9c" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/7f/66/b15ce62552d84bbfcec9a4873ab79d993a1dd4edb922cbfccae192bd5b5f/jaraco.classes-3.4.0-py3-none-any.whl", hash = "md5:7aab256ce5264ccb8c7447eb2bddd7d2" },
+]
+
+[[package]]
+name = "jaraco-context"
+version = "6.1.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/cb/9c/a788f5bb29c61e456b8ee52ce76dbdd32fd72cd73dd67bc95f42c7a8d13c/jaraco_context-6.1.0.tar.gz", hash = "md5:a31986312781405369c904eec861fd35" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/8d/48/aa685dbf1024c7bd82bede569e3a85f82c32fd3d79ba5fea578f0159571a/jaraco_context-6.1.0-py3-none-any.whl", hash = "md5:7a3c7b53e917696c8691b71e0ee91113" },
+]
+
+[[package]]
+name = "jaraco-functools"
+version = "4.4.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "more-itertools" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/0f/27/056e0638a86749374d6f57d0b0db39f29509cce9313cf91bdc0ac4d91084/jaraco_functools-4.4.0.tar.gz", hash = "md5:501918900674199182b1bfa39db200b6" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/fd/c4/813bb09f0985cb21e959f21f2464169eca882656849adf727ac7bb7e1767/jaraco_functools-4.4.0-py3-none-any.whl", hash = "md5:8e9c244550ca236762d5143b0d509f43" },
+]
+
+[[package]]
+name = "jeepney"
+version = "0.9.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/7b/6f/357efd7602486741aa73ffc0617fb310a29b588ed0fd69c2399acbb85b0c/jeepney-0.9.0.tar.gz", hash = "md5:d0c0d388ee003d6475750aebe56fc699" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b2/a3/e137168c9c44d18eff0376253da9f1e9234d0239e0ee230d2fee6cea8e55/jeepney-0.9.0-py3-none-any.whl", hash = "md5:bbf9ae7ccdf8fc96ce087260daad67d3" },
+]
+
+[[package]]
+name = "keyring"
+version = "25.7.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "jaraco-classes" },
+    { name = "jaraco-context" },
+    { name = "jaraco-functools" },
+    { name = "jeepney", marker = "sys_platform == 'linux'" },
+    { name = "pywin32-ctypes", marker = "sys_platform == 'win32'" },
+    { name = "secretstorage", marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/43/4b/674af6ef2f97d56f0ab5153bf0bfa28ccb6c3ed4d1babf4305449668807b/keyring-25.7.0.tar.gz", hash = "md5:57c23d340e4d08ac4896f142ee423eca" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/81/db/e655086b7f3a705df045bf0933bdd9c2f79bb3c97bfef1384598bb79a217/keyring-25.7.0-py3-none-any.whl", hash = "md5:1a2329367ca8df1fa9b193561a6001e4" },
+]
+
+[[package]]
+name = "more-itertools"
+version = "10.7.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/ce/a0/834b0cebabbfc7e311f30b46c8188790a37f89fc8d756660346fe5abfd09/more_itertools-10.7.0.tar.gz", hash = "md5:62eb0a088624e979ae594a2de094ca1c" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2b/9f/7ba6f94fc1e9ac3d2b853fdff3035fb2fa5afbed898c4a72b8a020610594/more_itertools-10.7.0-py3-none-any.whl", hash = "md5:1a46ae19bd01372e9c54874fe9ded040" },
+]
+
+[[package]]
+name = "mypy-extensions"
+version = "1.1.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b/mypy_extensions-1.1.0.tar.gz", hash = "md5:f59bfd7f9dca73f36c8feed12f9e8eba" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/79/7b/2c79738432f5c924bef5071f933bcc9efd0473bac3b4aa584a6f7c1c8df8/mypy_extensions-1.1.0-py3-none-any.whl", hash = "md5:625a3dc37151717cabf87b13a0b152b9" },
+]
+
+[[package]]
+name = "packaging"
+version = "26.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/65/ee/299d360cdc32edc7d2cf530f3accf79c4fca01e96ffc950d8a52213bd8e4/packaging-26.0.tar.gz", hash = "md5:2cbdbb5754f038736c3c361826c6872a" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b7/b9/c538f279a4e237a006a2c98387d081e9eb060d203d8ed34467cc0f0b9b53/packaging-26.0-py3-none-any.whl", hash = "md5:6612a2b4cddb48af24b6de0de620e353" },
+]
+
+[[package]]
+name = "pathspec"
+version = "1.0.4"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/fa/36/e27608899f9b8d4dff0617b2d9ab17ca5608956ca44461ac14ac48b44015/pathspec-1.0.4.tar.gz", hash = "md5:18d9e6adb72e544b56a88c3e53094b4e" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/ef/3c/2c197d226f9ea224a9ab8d197933f9da0ae0aac5b6e0f884e2b8d9c8e9f7/pathspec-1.0.4-py3-none-any.whl", hash = "md5:bebfca62d581830c52e736b1c88a0c46" },
+]
+
+[[package]]
+name = "platformdirs"
+version = "4.9.2"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/1b/04/fea538adf7dbbd6d186f551d595961e564a3b6715bdf276b477460858672/platformdirs-4.9.2.tar.gz", hash = "md5:729ad39c9d6b158caf536512567a6122" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/48/31/05e764397056194206169869b50cf2fee4dbbbc71b344705b9c0d878d4d8/platformdirs-4.9.2-py3-none-any.whl", hash = "md5:8d850081482b02617ea5ef5989b9c9e0" },
+]
+
+[[package]]
+name = "pluggy"
+version = "1.6.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "md5:54391218af778acb006c2d915085d469" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "md5:e107bd9fd0c26746617d74bac26fa0c5" },
+]
+
+[[package]]
+name = "pycparser"
+version = "3.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz", hash = "md5:56f3a0a82595b0cb04976cc0d3271a27" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl", hash = "md5:dfc689e63af0e21be54c80938cc8ac46" },
+]
+
+[[package]]
+name = "pygments"
+version = "2.19.2"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/b0/77/a5b8c569bf593b0140bde72ea885a803b82086995367bf2037de0159d924/pygments-2.19.2.tar.gz", hash = "md5:79260d1c566a507953a81d24b1c51c72" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c7/21/705964c7812476f378728bdf590ca4b771ec72385c533964653c68e86bdc/pygments-2.19.2-py3-none-any.whl", hash = "md5:c6f882e4a4ffd8543f245d4f7ce0d7fa" },
+]
+
+[[package]]
+name = "pytest"
+version = "9.0.2"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "iniconfig" },
+    { name = "packaging" },
+    { name = "pluggy" },
+    { name = "pygments" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f/pytest-9.0.2.tar.gz", hash = "md5:ce26088b3b97ab8fed58c8883de23241" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/3b/ab/b3226f0bd7cdcf710fbede2b3548584366da3b19b5021e74f5bde2a8fa3f/pytest-9.0.2-py3-none-any.whl", hash = "md5:600448842054deb501e95a70d7be737a" },
+]
+
+[[package]]
+name = "pytokens"
+version = "0.4.1"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/b6/34/b4e015b99031667a7b960f888889c5bd34ef585c85e1cb56a594b92836ac/pytokens-0.4.1.tar.gz", hash = "md5:c1549e0251398d9e1336fce2fad4731c" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cb/dc/08b1a080372afda3cceb4f3c0a7ba2bde9d6a5241f1edb02a22a019ee147/pytokens-0.4.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "md5:35c9d701353be7cb96bc06d23577d2f8" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/64/0c/41ea22205da480837a700e395507e6a24425151dfb7ead73343d6e2d7ffe/pytokens-0.4.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "md5:742ddbe8e99e2ad0802bd3ba72c87bd6" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e0/d2/afe5c7f8607018beb99971489dbb846508f1b8f351fcefc225fcf4b2adc0/pytokens-0.4.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "md5:036570b050a7b7282475c3739bc8a3c5" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/68/d4/00ffdbd370410c04e9591da9220a68dc1693ef7499173eb3e30d06e05ed1/pytokens-0.4.1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "md5:081a87d62e9e20c45529a51534169c60" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a7/c9/c3161313b4ca0c601eeefabd3d3b576edaa9afdefd32da97210700e47652/pytokens-0.4.1-cp313-cp313-win_amd64.whl", hash = "md5:52b0fb68d0d1797c3d06fa04d9d41563" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/8f/a7/b470f672e6fc5fee0a01d9e75005a0e617e162381974213a945fcd274843/pytokens-0.4.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "md5:c060cda6e52808ac880362b289d80f6d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/80/98/e83a36fe8d170c911f864bfded690d2542bfcfacb9c649d11a9e6eb9dc41/pytokens-0.4.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "md5:86209f1d11fa46561c59d77e07463a61" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/0f/95/70d7041273890f9f97a24234c00b746e8da86df462620194cef1d411ddeb/pytokens-0.4.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "md5:0d24bb593f7330efbf78f2ff71bd862c" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/da/79/76e6d09ae19c99404656d7db9c35dfd20f2086f3eb6ecb496b5b31163bad/pytokens-0.4.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "md5:3038f2603546a1538c49ec3dba6938ae" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/79/37/482e55fa1602e0a7ff012661d8c946bafdc05e480ea5a32f4f7e336d4aa9/pytokens-0.4.1-cp314-cp314-win_amd64.whl", hash = "md5:74fe4ae570598ab6bac8aa2f3ee21993" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/30/e8/20e7db907c23f3d63b0be3b8a4fd1927f6da2395f5bcc7f72242bb963dfe/pytokens-0.4.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "md5:dcc375516e076160243911600eb403b9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/d6/81/88a95ee9fafdd8f5f3452107748fd04c24930d500b9aba9738f3ade642cc/pytokens-0.4.1-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "md5:2ebfd14fb4f3e0cfff23d9b898c63d0f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cf/35/3aa899645e29b6375b4aed9f8d21df219e7c958c4c186b465e42ee0a06bf/pytokens-0.4.1-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "md5:12928f1cfd9139f69dbb553ba31c2c87" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/52/a0/07907b6ff512674d9b201859f7d212298c44933633c946703a20c25e9d81/pytokens-0.4.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "md5:4f0e65151b3b09d1190987c1031ef4c6" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/39/2a/cbbf9250020a4a8dd53ba83a46c097b69e5eb49dd14e708f496f548c6612/pytokens-0.4.1-cp314-cp314t-win_amd64.whl", hash = "md5:e38d9620ced368634b64478200dc55d9" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c6/78/397db326746f0a342855b81216ae1f0a32965deccfd7c830a2dbc66d2483/pytokens-0.4.1-py3-none-any.whl", hash = "md5:9726e81bc6406e33cad3b9b58e95d624" },
+]
+
+[[package]]
+name = "pywin32-ctypes"
+version = "0.2.3"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/de/3d/8161f7711c017e01ac9f008dfddd9410dff3674334c233bde66e7ba65bbf/pywin32_ctypes-0.2.3-py3-none-any.whl", hash = "md5:f74cca211e6c4a5e9b4d9b98b7c4b75a" },
+]
+
+[[package]]
+name = "ruff"
+version = "0.15.1"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/04/dc/4e6ac71b511b141cf626357a3946679abeba4cf67bc7cc5a17920f31e10d/ruff-0.15.1.tar.gz", hash = "md5:1c8f22110590b8e200135b4e1c937e56" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/23/bf/e6e4324238c17f9d9120a9d60aa99a7daaa21204c07fcd84e2ef03bb5fd1/ruff-0.15.1-py3-none-linux_armv6l.whl", hash = "md5:c95124f399b379d2ee441bec0a50bb16" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b3/ea/c8f89d32e7912269d38c58f3649e453ac32c528f93bb7f4219258be2e7ed/ruff-0.15.1-py3-none-macosx_10_12_x86_64.whl", hash = "md5:2285c9794d67598ef178a9619faf9147" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/5e/0f/1d0d88bc862624247d82c20c10d4c0f6bb2f346559d8af281674cf327f15/ruff-0.15.1-py3-none-macosx_11_0_arm64.whl", hash = "md5:df67bd05d89161a79f76d52e9d2f195a" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/f5/c8/291c49cefaa4a9248e986256df2ade7add79388fe179e0691be06fae6f37/ruff-0.15.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "md5:2f9adc44f6bc7b142c2e23b15ab3fe86" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/c3/1a/f5707440e5ae43ffa5365cac8bbb91e9665f4a883f560893829cf16a606b/ruff-0.15.1-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "md5:8d994c2c26b7ffb168cb7cfd1c227db0" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2a/ff/26ddc8c4da04c8fd3ee65a89c9fb99eaa5c30394269d424461467be2271f/ruff-0.15.1-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "md5:7541057db23e0c8ee57ea50e177d7357" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/fc/00/50920cb385b89413f7cdb4bb9bc8fc59c1b0f30028d8bccc294189a54955/ruff-0.15.1-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "md5:1d8b2e9debd3f3cf8f6dc62764b2b96f" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/5d/6d/2f5cad8380caf5632a15460c323ae326f1e1a2b5b90a6ee7519017a017ca/ruff-0.15.1-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "md5:452d267c0fe09cd2ca7f446b1c9755c8" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a3/1d/5f56cae1d6c40b8a318513599b35ea4b075d7dc1cd1d04449578c29d1d75/ruff-0.15.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "md5:a6cf56bfdc5ca92e547e71e3eb2bc948" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/cd/20/6f8d7d8f768c93b0382b33b9306b3b999918816da46537d5a61635514635/ruff-0.15.1-py3-none-manylinux_2_31_riscv64.whl", hash = "md5:cbb928388b653fd4a44822777c2164b7" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/9a/67/d640ac76069f64cdea59dba02af2e00b1fa30e2103c7f8d049c0cff4cafd/ruff-0.15.1-py3-none-musllinux_1_2_aarch64.whl", hash = "md5:d21adac47456c4a4708b31b6cafd2b05" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/65/3d/e1429f64a3ff89297497916b88c32a5cc88eeca7e9c787072d0e7f1d3e1e/ruff-0.15.1-py3-none-musllinux_1_2_armv7l.whl", hash = "md5:fe40bbaf72731351d832e45d4b2cd27d" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/78/83/e2c3bade17dad63bf1e1c2ffaf11490603b760be149e1419b07049b36ef2/ruff-0.15.1-py3-none-musllinux_1_2_i686.whl", hash = "md5:3c83bc1a2849c1059f5f54b30d0d9812" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/a1/27/fdc0e11a813e6338e0706e8b39bb7a1d61ea5b36873b351acee7e524a72a/ruff-0.15.1-py3-none-musllinux_1_2_x86_64.whl", hash = "md5:b4c1f4fa94711a0a1be9f1a95906785e" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/f6/58/ac864a75067dcbd3b95be5ab4eb2b601d7fbc3d3d736a27e391a4f92a5c1/ruff-0.15.1-py3-none-win32.whl", hash = "md5:62702d1ab31fd339939537cdbf251556" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/e0/5e/d4ccc8a27ecdb78116feac4935dfc39d1304536f4296168f91ed3ec00cd2/ruff-0.15.1-py3-none-win_amd64.whl", hash = "md5:23bca481e5a1a670a01d30b7df55b219" },
+    { url = "https://build.hubteam.com/pypi-mirror/packages/2a/07/5bda6a85b220c64c65686bc85bd0bbb23b29c62b3a9f9433fa55f17cda93/ruff-0.15.1-py3-none-win_arm64.whl", hash = "md5:bcefa909d6947331069f8e319e4637fa" },
+]
+
+[[package]]
+name = "secretstorage"
+version = "3.5.0"
+source = { registry = "https://private.hubteam.com/pypi/simple/" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "jeepney" },
+]
+sdist = { url = "https://build.hubteam.com/pypi-mirror/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "md5:e9de49f6474fc3734fde4209e594e7d9" }
+wheels = [
+    { url = "https://build.hubteam.com/pypi-mirror/packages/b7/46/f5af3402b579fd5e11573ce652019a67074317e18c1935cc0b4ba9b35552/secretstorage-3.5.0-py3-none-any.whl", hash = "md5:3c0ece2eb3aa489d8aab0b01c8e81b01" },
+]
