@@ -277,6 +277,21 @@ def _load_credentials() -> dict | None:
     }
 
 
+def clear_credentials() -> None:
+    """Remove all stored credentials from the system keyring."""
+    for key in (
+        KEYRING_TOKEN_KEY,
+        KEYRING_PHONE_KEY,
+        KEYRING_IAC_KEY,
+        KEYRING_API_BASE_KEY,
+        KEYRING_VERIFY_KEY,
+    ):
+        try:
+            keyring.delete_password(KEYRING_SERVICE, key)
+        except keyring.errors.PasswordDeleteError:
+            pass
+
+
 def get_authenticated_client() -> CatLinkAPI:
     """Return a CatLinkAPI client using stored credentials, or raise."""
     creds = _load_credentials()

@@ -9,6 +9,7 @@ import click
 from .api import (
     CatLinkAPI,
     CatLinkAPIError,
+    clear_credentials,
     get_authenticated_client,
     save_credentials,
 )
@@ -70,6 +71,13 @@ def login(phone: str, iac: str, password: str, region: str, no_verify: bool) -> 
         sys.exit(1)
     finally:
         client.close()
+
+
+@cli.command()
+def logout() -> None:
+    """Clear stored credentials."""
+    clear_credentials()
+    click.echo("Credentials cleared.")
 
 
 @cli.command("devices")
