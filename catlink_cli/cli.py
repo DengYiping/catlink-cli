@@ -11,6 +11,7 @@ from .api import (
     CatLinkAPIError,
     clear_credentials,
     get_authenticated_client,
+    get_system_timezone,
     save_credentials,
 )
 from .const import API_SERVERS, DEVICE_ACTIONS, DEVICE_MODES, WORK_STATUSES
@@ -393,7 +394,7 @@ def list_cats() -> None:
     """List all cats on the account."""
     client = get_authenticated_client()
     try:
-        cats = client.get_cats()
+        cats = client.get_cats(timezone_id=get_system_timezone())
         if not cats:
             click.echo("No cats found.")
             return
@@ -427,7 +428,7 @@ def cat_summary(pet_id: str, date: str | None) -> None:
         date = datetime.date.today().isoformat()
     client = get_authenticated_client()
     try:
-        data = client.get_cat_summary(pet_id, date)
+        data = client.get_cat_summary(pet_id, date, timezone_id=get_system_timezone())
         if not data:
             click.echo("No summary data returned.")
             return
