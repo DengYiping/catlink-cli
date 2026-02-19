@@ -27,7 +27,8 @@ class TestLoginCommand:
             cli, ["login", "--phone", "123", "--password", "pass", "--iac", "86"]
         )
         assert result.exit_code == 0
-        assert "successful" in result.output
+        assert "Login successful" in result.output
+        assert "https://api.example.com/" in result.output
         mock_save.assert_called_once_with(
             "tok", "123", "86", "https://api.example.com/", verify=True
         )
