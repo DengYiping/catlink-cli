@@ -19,6 +19,7 @@ from .const import (
     KEYRING_PHONE_KEY,
     KEYRING_SERVICE,
     KEYRING_TOKEN_KEY,
+    KEYRING_VERIFY_KEY,
     RSA_PUBLIC_KEY,
     SIGN_KEY,
 )
@@ -42,11 +43,13 @@ class CatLinkAPI:
         api_base: str = DEFAULT_API_BASE,
         token: str | None = None,
         language: str = "en_GB",
+        verify: bool = True,
     ) -> None:
         self.api_base = api_base.rstrip("/") + "/"
         self.token = token or ""
         self.language = language
-        self._client = httpx.Client(timeout=60.0)
+        self.verify = verify
+        self._client = httpx.Client(timeout=60.0, verify=verify)
 
     def close(self) -> None:
         """Close the HTTP client."""
@@ -248,12 +251,15 @@ class CatLinkAPI:
         return rsp.get("data") or {}
 
 
-def save_credentials(token: str, phone: str, phone_iac: str, api_base: str) -> None:
+def save_credentials(
+    token: str, phone: str, phone_iac: str, api_base: str, verify: bool = True
+) -> None:
     """Persist authentication credentials in the system keyring."""
     keyring.set_password(KEYRING_SERVICE, KEYRING_TOKEN_KEY, token)
     keyring.set_password(KEYRING_SERVICE, KEYRING_PHONE_KEY, phone)
     keyring.set_password(KEYRING_SERVICE, KEYRING_IAC_KEY, phone_iac)
     keyring.set_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY, api_base)
+    keyring.set_password(KEYRING_SERVICE, KEYRING_VERIFY_KEY, str(verify))
 
 
 def _load_credentials() -> dict | None:
@@ -261,11 +267,13 @@ def _load_credentials() -> dict | None:
     token = keyring.get_password(KEYRING_SERVICE, KEYRING_TOKEN_KEY)
     if not token:
         return None
+    verify_str = keyring.get_password(KEYRING_SERVICE, KEYRING_VERIFY_KEY)
     return {
         "token": token,
         "phone": keyring.get_password(KEYRING_SERVICE, KEYRING_PHONE_KEY) or "",
         "phone_iac": keyring.get_password(KEYRING_SERVICE, KEYRING_IAC_KEY) or "86",
         "api_base": keyring.get_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY) or DEFAULT_API_BASE,
+        "verify": verify_str != "False",
     }
 
 
@@ -274,4 +282,4 @@ def get_authenticated_client() -> CatLinkAPI:
     creds = _load_credentials()
     if not creds:
         raise CatLinkAPIError("Not logged in. Run 'catlink login' first.")
-    return CatLinkAPI(api_base=creds["api_base"], token=creds["token"])
+    return CatLinkAPI(api_base=creds["api_base"], token=creds["token"], verify=creds["verify"])

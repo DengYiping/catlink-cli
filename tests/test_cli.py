@@ -28,7 +28,9 @@ class TestLoginCommand:
         )
         assert result.exit_code == 0
         assert "successful" in result.output
-        mock_save.assert_called_once_with("tok", "123", "86", "https://api.example.com/")
+        mock_save.assert_called_once_with(
+            "tok", "123", "86", "https://api.example.com/", verify=True
+        )
 
     @patch("catlink_cli.cli.CatLinkAPI")
     def test_login_failure(self, mock_api_cls: MagicMock, runner: CliRunner) -> None:

@@ -44,9 +44,16 @@ def cli(verbose: bool) -> None:
     show_default=True,
     help="API region.",
 )
-def login(phone: str, iac: str, password: str, region: str) -> None:
+@click.option(
+    "--no-verify",
+    is_flag=True,
+    default=False,
+    help="Disable SSL certificate verification.",
+)
+def login(phone: str, iac: str, password: str, region: str, no_verify: bool) -> None:
     """Authenticate with your CatLink account."""
-    client = CatLinkAPI()
+    verify = not no_verify
+    client = CatLinkAPI(verify=verify)
     try:
         if region == "auto":
             token, api_base = client.login_auto_region(iac, phone, password)
@@ -56,7 +63,7 @@ def login(phone: str, iac: str, password: str, region: str) -> None:
             api_base = API_SERVERS[region]
             client.api_base = api_base
             token = client.login(iac, phone, password)
-        save_credentials(token, phone, iac, api_base)
+        save_credentials(token, phone, iac, api_base, verify=verify)
         click.echo("Login successful.")
     except CatLinkAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
