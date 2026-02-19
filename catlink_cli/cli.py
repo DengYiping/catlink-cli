@@ -13,7 +13,13 @@ from .api import (
     get_authenticated_client,
     save_credentials,
 )
-from .const import DEVICE_ACTIONS, DEVICE_MODES, WORK_STATUSES
+from .const import API_SERVERS, DEVICE_ACTIONS, DEVICE_MODES, WORK_STATUSES
+
+_URL_TO_REGION = {url: name for name, url in API_SERVERS.items()}
+
+
+def _region_name_from_url(api_base: str) -> str:
+    return _URL_TO_REGION.get(api_base, "unknown")
 
 
 @click.group()
@@ -25,13 +31,14 @@ def cli(verbose: bool) -> None:
 
 
 @cli.command()
-@click.option("--phone", prompt=True, help="Phone number (digits only).")
 @click.option(
     "--iac",
+    prompt="Country code (e.g. 1=US, 44=UK, 86=China)",
     default="86",
     show_default=True,
-    help="International area code.",
+    help="Country calling code, digits only (e.g. 1 for US, 44 for UK, 86 for China).",
 )
+@click.option("--phone", prompt=True, help="Phone number (digits only).")
 @click.option(
     "--password",
     prompt=True,
@@ -59,13 +66,12 @@ def login(phone: str, iac: str, password: str, region: str, no_verify: bool) -> 
         if region == "auto":
             token, api_base = client.login_auto_region(iac, phone, password)
         else:
-            from .const import API_SERVERS
-
             api_base = API_SERVERS[region]
             client.api_base = api_base
             token = client.login(iac, phone, password)
         save_credentials(token, phone, iac, api_base, verify=verify)
-        click.echo("Login successful.")
+        region_name = _region_name_from_url(api_base)
+        click.echo(f"Login successful. Connected to {region_name} ({api_base}).")
     except CatLinkAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
         sys.exit(1)
