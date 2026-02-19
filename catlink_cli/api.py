@@ -3,6 +3,7 @@
 import base64
 import hashlib
 import logging
+import pathlib
 import time
 
 import httpx
@@ -237,15 +238,20 @@ class CatLinkAPI:
         self._check_response(rsp)
         return rsp
 
-    def get_cats(self) -> list[dict]:
+    def get_cats(self, timezone_id: str | None = None) -> list[dict]:
         """Get the list of cats."""
-        rsp = self._request_with_reauth("token/pet/health/v3/cats")
+        pms: dict[str, str] = {}
+        if timezone_id:
+            pms["timezoneId"] = timezone_id
+        rsp = self._request_with_reauth("token/pet/health/v3/cats", pms or None)
         self._check_response(rsp)
         return rsp.get("data", {}).get("cats") or []
 
-    def get_cat_summary(self, pet_id: str, date: str) -> dict:
+    def get_cat_summary(self, pet_id: str, date: str, timezone_id: str | None = None) -> dict:
         """Get a cat's health summary for a given date."""
-        pms = {"petId": pet_id, "date": date, "sport": 1}
+        pms: dict[str, str | int] = {"petId": pet_id, "date": date, "sport": 1}
+        if timezone_id:
+            pms["timezoneId"] = timezone_id
         rsp = self._request_with_reauth("token/pet/health/v3/summarySimple", pms)
         self._check_response(rsp)
         return rsp.get("data") or {}
@@ -290,6 +296,18 @@ def clear_credentials() -> None:
             keyring.delete_password(KEYRING_SERVICE, key)
         except keyring.errors.PasswordDeleteError:
             pass
+
+
+def get_system_timezone() -> str:
+    """Detect the system IANA timezone, falling back to UTC."""
+    tz_path = pathlib.Path("/etc/localtime")
+    if tz_path.is_symlink():
+        resolved = str(tz_path.resolve())
+        marker = "zoneinfo/"
+        idx = resolved.find(marker)
+        if idx != -1:
+            return resolved[idx + len(marker) :]
+    return "UTC"
 
 
 def get_authenticated_client() -> CatLinkAPI:
