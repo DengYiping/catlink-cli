@@ -97,6 +97,76 @@ class TestStatusCommand:
         assert "15" in result.output
 
 
+class TestFeederStatusCommand:
+    @patch("catlink_cli.cli.get_authenticated_client")
+    def test_shows_feeder_status(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
+        mock_client = MagicMock()
+        mock_client.get_device_detail.return_value = {
+            "online": True,
+            "foodOutStatus": "normal",
+            "weight": 250,
+            "autoFillStatus": "on",
+            "powerSupplyStatus": "USB",
+            "keyLockStatus": "off",
+            "indicatorLightStatus": "on",
+            "breathLightStatus": "on",
+            "firmwareVersion": "1.2.3",
+        }
+        mock_get_client.return_value = mock_client
+
+        result = runner.invoke(cli, ["status", "dev1", "--type", "FEEDER"])
+        assert result.exit_code == 0
+        assert "normal" in result.output
+        assert "250" in result.output
+        assert "USB" in result.output
+        assert "1.2.3" in result.output
+
+    @patch("catlink_cli.cli.get_authenticated_client")
+    def test_feeder_status_with_error(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
+        mock_client = MagicMock()
+        mock_client.get_device_detail.return_value = {
+            "online": True,
+            "currentErrorMessage": "Food jam",
+        }
+        mock_get_client.return_value = mock_client
+
+        result = runner.invoke(cli, ["status", "dev1", "--type", "FEEDER"])
+        assert result.exit_code == 0
+        assert "Food jam" in result.output
+
+
+class TestFeedCommand:
+    @patch("catlink_cli.cli.get_authenticated_client")
+    def test_feed_default_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
+        mock_client = MagicMock()
+        mock_client.food_out.return_value = {"returnCode": 0}
+        mock_get_client.return_value = mock_client
+
+        result = runner.invoke(cli, ["feed", "dev1"])
+        assert result.exit_code == 0
+        assert "5 portion" in result.output
+        mock_client.food_out.assert_called_once_with("dev1", 5)
+
+    @patch("catlink_cli.cli.get_authenticated_client")
+    def test_feed_custom_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
+        mock_client = MagicMock()
+        mock_client.food_out.return_value = {"returnCode": 0}
+        mock_get_client.return_value = mock_client
+
+        result = runner.invoke(cli, ["feed", "dev1", "--portions", "3"])
+        assert result.exit_code == 0
+        assert "3 portion" in result.output
+        mock_client.food_out.assert_called_once_with("dev1", 3)
+
+    @patch("catlink_cli.cli.get_authenticated_client")
+    def test_feed_invalid_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
+        result = runner.invoke(cli, ["feed", "dev1", "--portions", "0"])
+        assert result.exit_code != 0
+
+        result = runner.invoke(cli, ["feed", "dev1", "--portions", "11"])
+        assert result.exit_code != 0
+
+
 class TestCleanCommand:
     @patch("catlink_cli.cli.get_authenticated_client")
     def test_clean_scooper(self, mock_get_client: MagicMock, runner: CliRunner) -> None:

@@ -113,6 +113,58 @@ class TestCatLinkAPI:
         assert result == {"returnCode": 0, "data": {}}
 
 
+class TestFoodOut:
+    @patch("catlink_cli.api.httpx.Client")
+    def test_food_out_sends_post(self, mock_client_cls: MagicMock) -> None:
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"returnCode": 0}
+        mock_client = MagicMock()
+        mock_client.post.return_value = mock_resp
+        mock_client_cls.return_value = mock_client
+
+        client = CatLinkAPI(token="tok")
+        client._client = mock_client
+        result = client.food_out("dev1", portions=3)
+        assert result["returnCode"] == 0
+        mock_client.post.assert_called_once()
+        call_kwargs = mock_client.post.call_args
+        assert call_kwargs[1]["data"]["footOutNum"] == 3
+        assert call_kwargs[1]["data"]["deviceId"] == "dev1"
+
+    @patch("catlink_cli.api.httpx.Client")
+    def test_food_out_default_portions(self, mock_client_cls: MagicMock) -> None:
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {"returnCode": 0}
+        mock_client = MagicMock()
+        mock_client.post.return_value = mock_resp
+        mock_client_cls.return_value = mock_client
+
+        client = CatLinkAPI(token="tok")
+        client._client = mock_client
+        client.food_out("dev1")
+        call_kwargs = mock_client.post.call_args
+        assert call_kwargs[1]["data"]["footOutNum"] == 5
+
+
+class TestGetDeviceLogs:
+    @patch("catlink_cli.api.httpx.Client")
+    def test_feeder_logs(self, mock_client_cls: MagicMock) -> None:
+        mock_resp = MagicMock()
+        mock_resp.json.return_value = {
+            "returnCode": 0,
+            "data": {"feederLogTop5": [{"time": "12:00", "event": "fed"}]},
+        }
+        mock_client = MagicMock()
+        mock_client.get.return_value = mock_resp
+        mock_client_cls.return_value = mock_client
+
+        client = CatLinkAPI(token="tok")
+        client._client = mock_client
+        logs = client.get_device_logs("dev1", "FEEDER")
+        assert len(logs) == 1
+        assert logs[0]["event"] == "fed"
+
+
 class TestGetAuthenticatedClient:
     @patch("catlink_cli.api.keyring")
     def test_raises_when_no_credentials(self, mock_keyring: MagicMock) -> None:

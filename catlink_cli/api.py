@@ -211,12 +211,19 @@ class CatLinkAPI:
         api_map = {
             "SCOOPER": "token/device/scooper/stats/log/top5",
             "LITTER_BOX_599": "token/litterbox/stats/log/top5",
+            "FEEDER": "token/device/feeder/stats/log/top5",
         }
         api = api_map.get(device_type, "token/device/union/logs")
         rsp = self._request_with_reauth(api, {"deviceId": device_id})
         self._check_response(rsp)
         data = rsp.get("data", {})
-        return data.get("scooperLogTop5") or data.get("logs") or data.get("list") or []
+        return (
+            data.get("scooperLogTop5")
+            or data.get("feederLogTop5")
+            or data.get("logs")
+            or data.get("list")
+            or []
+        )
 
     def replace_garbage_bag(self, device_id: str, enable: bool = True) -> dict:
         """Trigger garbage bag replacement on a LitterBox."""
@@ -235,6 +242,13 @@ class CatLinkAPI:
             "deviceType": device_type,
         }
         rsp = self.request(api, pms, "POST")
+        self._check_response(rsp)
+        return rsp
+
+    def food_out(self, device_id: str, portions: int = 5) -> dict:
+        """Manually dispense food from a feeder."""
+        pms = {"footOutNum": portions, "deviceId": device_id}
+        rsp = self.request("token/device/feeder/foodOut", pms, "POST")
         self._check_response(rsp)
         return rsp
 
