@@ -68,12 +68,14 @@ uv run catlink logout
 ## Authentication
 
 - `catlink login` stores your token, phone, region, and SSL verify setting in the system keyring under the service name `catlink-cli`.
-- `catlink logout` removes all stored credentials.
+- Tokens are stored per region. Use `--region` on most commands to select which stored token to use.
+- Commands aggregate results across all stored regions by default. Use `--region` to target a specific region.
+- `catlink logout` removes all stored credentials for all regions.
 - If you see `Not logged in. Run 'catlink login' first.`, authenticate before running other commands.
 
 ### Regions
 
-Use `--region` to force a CatLink API region, or `auto` to try them in sequence until one succeeds.
+Use `--region` to force a CatLink API region, or `auto` to log into all regions.
 
 Available regions:
 
@@ -146,7 +148,8 @@ Options:
   --phone TEXT                    Phone number (digits only).
   --password TEXT                 Account password.
   --region [auto|global|china|usa|singapore]
-                                  API region.  [default: auto]
+                                  API region. Use 'auto' to login to all
+                                  regions.  [default: auto]
   --no-verify                     Disable SSL certificate verification.
   --help                          Show this message and exit.
 ```

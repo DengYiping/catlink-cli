@@ -20,7 +20,10 @@ class TestLoginCommand:
         self, mock_api_cls: MagicMock, mock_save: MagicMock, runner: CliRunner
     ) -> None:
         mock_instance = MagicMock()
-        mock_instance.login_auto_region.return_value = ("tok", "https://api.example.com/")
+        mock_instance.login_all_regions.return_value = (
+            [("usa", "https://api.example.com/", "tok")],
+            [],
+        )
         mock_api_cls.return_value = mock_instance
 
         result = runner.invoke(
@@ -29,16 +32,15 @@ class TestLoginCommand:
         assert result.exit_code == 0
         assert "Login successful" in result.output
         assert "https://api.example.com/" in result.output
+        assert "usa" in result.output
         mock_save.assert_called_once_with(
             "tok", "123", "86", "https://api.example.com/", verify=True
         )
 
     @patch("catlink_cli.cli.CatLinkAPI")
     def test_login_failure(self, mock_api_cls: MagicMock, runner: CliRunner) -> None:
-        from catlink_cli.api import CatLinkAPIError
-
         mock_instance = MagicMock()
-        mock_instance.login_auto_region.side_effect = CatLinkAPIError("bad creds")
+        mock_instance.login_all_regions.return_value = ([], [("usa", "bad creds")])
         mock_api_cls.return_value = mock_instance
 
         result = runner.invoke(cli, ["login", "--phone", "123", "--password", "bad", "--iac", "86"])
@@ -47,24 +49,24 @@ class TestLoginCommand:
 
 
 class TestDevicesCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_lists_devices(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_devices.return_value = [
             {"id": "1", "deviceName": "MyScooper", "deviceType": "SCOOPER", "model": "SE"}
         ]
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["devices"])
         assert result.exit_code == 0
         assert "MyScooper" in result.output
         assert "SCOOPER" in result.output
 
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_no_devices(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_devices.return_value = []
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["devices"])
         assert result.exit_code == 0
@@ -72,7 +74,7 @@ class TestDevicesCommand:
 
 
 class TestStatusCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_shows_status(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_device_detail.return_value = {
@@ -87,7 +89,7 @@ class TestStatusCommand:
             "temperature": "25",
             "humidity": "60",
         }
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["status", "123", "--type", "SCOOPER"])
         assert result.exit_code == 0
@@ -98,7 +100,7 @@ class TestStatusCommand:
 
 
 class TestFeederStatusCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_shows_feeder_status(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_device_detail.return_value = {
@@ -112,7 +114,7 @@ class TestFeederStatusCommand:
             "breathLightStatus": "on",
             "firmwareVersion": "1.2.3",
         }
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["status", "dev1", "--type", "FEEDER"])
         assert result.exit_code == 0
@@ -121,14 +123,14 @@ class TestFeederStatusCommand:
         assert "USB" in result.output
         assert "1.2.3" in result.output
 
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_feeder_status_with_error(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_device_detail.return_value = {
             "online": True,
             "currentErrorMessage": "Food jam",
         }
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["status", "dev1", "--type", "FEEDER"])
         assert result.exit_code == 0
@@ -136,29 +138,29 @@ class TestFeederStatusCommand:
 
 
 class TestFeedCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_feed_default_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.food_out.return_value = {"returnCode": 0}
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["feed", "dev1"])
         assert result.exit_code == 0
         assert "5 portion" in result.output
         mock_client.food_out.assert_called_once_with("dev1", 5)
 
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_feed_custom_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.food_out.return_value = {"returnCode": 0}
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["feed", "dev1", "--portions", "3"])
         assert result.exit_code == 0
         assert "3 portion" in result.output
         mock_client.food_out.assert_called_once_with("dev1", 3)
 
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_feed_invalid_portions(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         result = runner.invoke(cli, ["feed", "dev1", "--portions", "0"])
         assert result.exit_code != 0
@@ -168,11 +170,11 @@ class TestFeedCommand:
 
 
 class TestCleanCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_clean_scooper(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.send_action.return_value = {"returnCode": 0}
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["clean", "123"])
         assert result.exit_code == 0
@@ -181,11 +183,11 @@ class TestCleanCommand:
 
 
 class TestPauseCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_pause(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.send_action.return_value = {"returnCode": 0}
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["pause", "123"])
         assert result.exit_code == 0
@@ -193,13 +195,13 @@ class TestPauseCommand:
 
 
 class TestCatsCommand:
-    @patch("catlink_cli.cli.get_authenticated_client")
+    @patch("catlink_cli.cli.get_authenticated_clients")
     def test_lists_cats(self, mock_get_client: MagicMock, runner: CliRunner) -> None:
         mock_client = MagicMock()
         mock_client.get_cats.return_value = [
             {"name": "Whiskers", "id": "42", "weight": "4.2", "breedName": "Tabby"}
         ]
-        mock_get_client.return_value = mock_client
+        mock_get_client.return_value = [("usa", mock_client)]
 
         result = runner.invoke(cli, ["cats"])
         assert result.exit_code == 0

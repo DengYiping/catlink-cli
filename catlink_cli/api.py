@@ -36,6 +36,61 @@ class CatLinkAPIError(Exception):
         super().__init__(message)
 
 
+def _region_key(key: str, region: str) -> str:
+    """
+    Build a region-scoped keyring key.
+
+    Args:
+        key: Base key name.
+        region: Region identifier.
+
+    Returns:
+        Region-scoped key name.
+    """
+    return f"{key}:{region}"
+
+
+def _region_from_api_base(api_base: str) -> str | None:
+    """
+    Resolve a region name from an API base URL.
+
+    Args:
+        api_base: API base URL to match.
+
+    Returns:
+        Region name if known, otherwise None.
+    """
+    normalized = api_base.rstrip("/") + "/"
+    for region, base_url in API_SERVERS.items():
+        if base_url == normalized:
+            return region
+    return None
+
+
+def _merge_devices(primary: list[dict], extra: list[dict]) -> list[dict]:
+    """
+    Merge device lists and de-duplicate by ID.
+
+    Args:
+        primary: Primary device list.
+        extra: Additional device list.
+
+    Returns:
+        Merged device list.
+    """
+    merged: list[dict] = []
+    seen: set[str] = set()
+    for dev in [*primary, *extra]:
+        dev_id = dev.get("id") or dev.get("deviceId") or dev.get("mac")
+        if dev_id:
+            dev_id = str(dev_id)
+            if dev_id in seen:
+                continue
+            seen.add(dev_id)
+        merged.append(dev)
+    return merged
+
+
 class CatLinkAPI:
     """Client for the CatLink cloud API."""
 
@@ -149,6 +204,32 @@ class CatLinkAPI:
                 continue
         raise CatLinkAPIError(f"Login failed on all regions: {'; '.join(errors)}")
 
+    def login_all_regions(
+        self, phone_iac: str, phone: str, password: str
+    ) -> tuple[list[tuple[str, str, str]], list[tuple[str, str]]]:
+        """
+        Try all API regions and return successes and errors.
+
+        Args:
+            phone_iac: Country calling code.
+            phone: Phone number.
+            password: Account password (plaintext or encrypted).
+
+        Returns:
+            Tuple of (successes, errors).
+        """
+        successes: list[tuple[str, str, str]] = []
+        errors: list[tuple[str, str]] = []
+        for region, base_url in API_SERVERS.items():
+            self.api_base = base_url
+            try:
+                tok = self.login(phone_iac, phone, password)
+            except (CatLinkAPIError, httpx.HTTPError) as exc:
+                errors.append((region, str(exc)))
+                continue
+            successes.append((region, base_url, tok))
+        return successes, errors
+
     def _request_with_reauth(
         self,
         api: str,
@@ -159,7 +240,8 @@ class CatLinkAPI:
         rsp = self.request(api, params, method)
         code = rsp.get("returnCode", 0)
         if code == 1002:
-            creds = _load_credentials()
+            region = _region_from_api_base(self.api_base)
+            creds = _load_credentials(region=region)
             if creds:
                 self.login(creds["phone_iac"], creds["phone"], creds["token"])
                 rsp = self.request(api, params, method)
@@ -169,7 +251,34 @@ class CatLinkAPI:
         """Get the list of devices."""
         rsp = self._request_with_reauth("token/device/union/list/sorted", {"type": "NONE"})
         self._check_response(rsp)
-        return rsp.get("data", {}).get("devices") or []
+        devices = rsp.get("data", {}).get("devices") or []
+        if not any(dev.get("deviceType") == "FEEDER" for dev in devices):
+            devices = self._try_expand_devices(devices)
+        return devices
+
+    def _try_expand_devices(self, devices: list[dict]) -> list[dict]:
+        """
+        Attempt to expand the device list with alternate type filters.
+
+        Args:
+            devices: Existing device list.
+
+        Returns:
+            Expanded device list with duplicates removed.
+        """
+        expanded = list(devices)
+        for device_type in ("FEEDER", "ALL"):
+            try:
+                rsp = self._request_with_reauth(
+                    "token/device/union/list/sorted", {"type": device_type}
+                )
+                self._check_response(rsp)
+            except (CatLinkAPIError, httpx.HTTPError):
+                continue
+            extra = rsp.get("data", {}).get("devices") or []
+            if extra:
+                expanded = _merge_devices(expanded, extra)
+        return expanded
 
     def get_device_detail(self, device_id: str, device_type: str) -> dict:
         """Get detailed info for a device."""
@@ -274,38 +383,158 @@ class CatLinkAPI:
 def save_credentials(
     token: str, phone: str, phone_iac: str, api_base: str, verify: bool = True
 ) -> None:
-    """Persist authentication credentials in the system keyring."""
+    """
+    Persist authentication credentials in the system keyring.
+
+    Args:
+        token: Authentication token.
+        phone: Phone number used to authenticate.
+        phone_iac: Country calling code used to authenticate.
+        api_base: API base URL for the region.
+        verify: Whether SSL certificate verification is enabled.
+
+    Returns:
+        None.
+    """
     keyring.set_password(KEYRING_SERVICE, KEYRING_TOKEN_KEY, token)
     keyring.set_password(KEYRING_SERVICE, KEYRING_PHONE_KEY, phone)
     keyring.set_password(KEYRING_SERVICE, KEYRING_IAC_KEY, phone_iac)
     keyring.set_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY, api_base)
     keyring.set_password(KEYRING_SERVICE, KEYRING_VERIFY_KEY, str(verify))
+    region = _region_from_api_base(api_base)
+    if region:
+        keyring.set_password(KEYRING_SERVICE, _region_key(KEYRING_TOKEN_KEY, region), token)
+        keyring.set_password(KEYRING_SERVICE, _region_key(KEYRING_PHONE_KEY, region), phone)
+        keyring.set_password(KEYRING_SERVICE, _region_key(KEYRING_IAC_KEY, region), phone_iac)
+        keyring.set_password(KEYRING_SERVICE, _region_key(KEYRING_API_BASE_KEY, region), api_base)
+        keyring.set_password(KEYRING_SERVICE, _region_key(KEYRING_VERIFY_KEY, region), str(verify))
 
 
-def _load_credentials() -> dict | None:
-    """Load stored credentials from the system keyring."""
+def _load_credentials_for_region(region: str) -> dict | None:
+    """
+    Load stored credentials for a specific region.
+
+    Args:
+        region: Region identifier.
+
+    Returns:
+        Stored credential dictionary, or None if missing.
+    """
+    token = keyring.get_password(KEYRING_SERVICE, _region_key(KEYRING_TOKEN_KEY, region))
+    if not token:
+        return None
+    verify_str = keyring.get_password(KEYRING_SERVICE, _region_key(KEYRING_VERIFY_KEY, region))
+    if verify_str is None:
+        verify_str = keyring.get_password(KEYRING_SERVICE, KEYRING_VERIFY_KEY)
+    return {
+        "token": token,
+        "phone": keyring.get_password(
+            KEYRING_SERVICE, _region_key(KEYRING_PHONE_KEY, region)
+        )
+        or keyring.get_password(KEYRING_SERVICE, KEYRING_PHONE_KEY)
+        or "",
+        "phone_iac": keyring.get_password(
+            KEYRING_SERVICE, _region_key(KEYRING_IAC_KEY, region)
+        )
+        or keyring.get_password(KEYRING_SERVICE, KEYRING_IAC_KEY)
+        or "86",
+        "api_base": keyring.get_password(
+            KEYRING_SERVICE, _region_key(KEYRING_API_BASE_KEY, region)
+        )
+        or API_SERVERS.get(region, DEFAULT_API_BASE),
+        "verify": verify_str != "False" if verify_str is not None else True,
+    }
+
+
+def _load_legacy_credentials() -> dict | None:
+    """
+    Load legacy (non-region-scoped) credentials.
+
+    Returns:
+        Stored credential dictionary, or None if missing.
+    """
     token = keyring.get_password(KEYRING_SERVICE, KEYRING_TOKEN_KEY)
     if not token:
         return None
+    api_base = keyring.get_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY) or DEFAULT_API_BASE
     verify_str = keyring.get_password(KEYRING_SERVICE, KEYRING_VERIFY_KEY)
     return {
         "token": token,
         "phone": keyring.get_password(KEYRING_SERVICE, KEYRING_PHONE_KEY) or "",
         "phone_iac": keyring.get_password(KEYRING_SERVICE, KEYRING_IAC_KEY) or "86",
-        "api_base": keyring.get_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY) or DEFAULT_API_BASE,
-        "verify": verify_str != "False",
+        "api_base": api_base,
+        "verify": verify_str != "False" if verify_str is not None else True,
     }
 
 
+def _load_credentials(*, region: str | None = None) -> dict | None:
+    """
+    Load stored credentials from the system keyring.
+
+    Args:
+        region: Optional region identifier to select region-scoped credentials.
+
+    Returns:
+        Stored credential dictionary, or None if missing.
+    """
+    if region:
+        return _load_credentials_for_region(region)
+    api_base = keyring.get_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY)
+    if api_base:
+        region_name = _region_from_api_base(api_base)
+        if region_name:
+            creds = _load_credentials_for_region(region_name)
+            if creds:
+                return creds
+    return _load_legacy_credentials()
+
+
+def _load_all_credentials() -> list[tuple[str, dict]]:
+    """
+    Load credentials for all regions that have stored tokens.
+
+    Returns:
+        List of (region, credential dict) tuples.
+    """
+    creds: list[tuple[str, dict]] = []
+    for region in API_SERVERS:
+        region_creds = _load_credentials_for_region(region)
+        if region_creds:
+            creds.append((region, region_creds))
+    if creds:
+        return creds
+    legacy = _load_legacy_credentials()
+    if legacy:
+        region_name = _region_from_api_base(legacy["api_base"]) or "default"
+        return [(region_name, legacy)]
+    return []
+
+
 def clear_credentials() -> None:
-    """Remove all stored credentials from the system keyring."""
-    for key in (
+    """
+    Remove all stored credentials from the system keyring.
+
+    Returns:
+        None.
+    """
+    keys = [
         KEYRING_TOKEN_KEY,
         KEYRING_PHONE_KEY,
         KEYRING_IAC_KEY,
         KEYRING_API_BASE_KEY,
         KEYRING_VERIFY_KEY,
-    ):
+    ]
+    for region in API_SERVERS:
+        keys.extend(
+            [
+                _region_key(KEYRING_TOKEN_KEY, region),
+                _region_key(KEYRING_PHONE_KEY, region),
+                _region_key(KEYRING_IAC_KEY, region),
+                _region_key(KEYRING_API_BASE_KEY, region),
+                _region_key(KEYRING_VERIFY_KEY, region),
+            ]
+        )
+    for key in keys:
         try:
             keyring.delete_password(KEYRING_SERVICE, key)
         except keyring.errors.PasswordDeleteError:
@@ -324,9 +553,47 @@ def get_system_timezone() -> str:
     return "UTC"
 
 
-def get_authenticated_client() -> CatLinkAPI:
-    """Return a CatLinkAPI client using stored credentials, or raise."""
-    creds = _load_credentials()
+def get_authenticated_client(*, region: str | None = None) -> CatLinkAPI:
+    """
+    Return a CatLinkAPI client using stored credentials, or raise.
+
+    Args:
+        region: Optional region identifier to select region-scoped credentials.
+
+    Returns:
+        Authenticated CatLinkAPI client.
+    """
+    creds = _load_credentials(region=region)
     if not creds:
         raise CatLinkAPIError("Not logged in. Run 'catlink login' first.")
     return CatLinkAPI(api_base=creds["api_base"], token=creds["token"], verify=creds["verify"])
+
+
+def get_authenticated_clients(*, region: str | None = None) -> list[tuple[str, CatLinkAPI]]:
+    """
+    Return CatLinkAPI clients for one or more regions.
+
+    Args:
+        region: Optional region identifier to select a single region client.
+
+    Returns:
+        List of (region, CatLinkAPI) tuples.
+    """
+    if region:
+        return [(region, get_authenticated_client(region=region))]
+    creds_list = _load_all_credentials()
+    if not creds_list:
+        raise CatLinkAPIError("Not logged in. Run 'catlink login' first.")
+    clients: list[tuple[str, CatLinkAPI]] = []
+    for region_name, creds in creds_list:
+        clients.append(
+            (
+                region_name,
+                CatLinkAPI(
+                    api_base=creds["api_base"],
+                    token=creds["token"],
+                    verify=creds["verify"],
+                ),
+            )
+        )
+    return clients
