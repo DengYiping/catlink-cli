@@ -81,6 +81,9 @@ def _merge_devices(primary: list[dict], extra: list[dict]) -> list[dict]:
     merged: list[dict] = []
     seen: set[str] = set()
     for dev in [*primary, *extra]:
+        if not isinstance(dev, dict):
+            merged.append(dev)
+            continue
         dev_id = dev.get("id") or dev.get("deviceId") or dev.get("mac")
         if dev_id:
             dev_id = str(dev_id)
@@ -89,6 +92,56 @@ def _merge_devices(primary: list[dict], extra: list[dict]) -> list[dict]:
             seen.add(dev_id)
         merged.append(dev)
     return merged
+
+
+def _extract_devices(data: dict) -> list[dict]:
+    """
+    Extract device dictionaries from response data.
+
+    Args:
+        data: Response data section.
+
+    Returns:
+        List of device dictionaries.
+    """
+    devices, _ = _extract_devices_or_ids(data)
+    return devices
+
+
+def _extract_devices_or_ids(data: dict) -> tuple[list[dict], list[str]]:
+    """
+    Extract device dictionaries or IDs from response data.
+
+    Args:
+        data: Response data section.
+
+    Returns:
+        Tuple of (devices, ids).
+    """
+    if not isinstance(data, dict):
+        return [], []
+
+    def _from_list(items: list) -> tuple[list[dict], list[str]]:
+        if items and all(isinstance(item, dict) for item in items):
+            return list(items), []
+        if items and all(isinstance(item, str) for item in items):
+            return [], list(items)
+        return [], []
+
+    for key in ("devices", "list", "records"):
+        val = data.get(key)
+        if isinstance(val, list):
+            devices, ids = _from_list(val)
+            if devices or ids:
+                return devices, ids
+
+    devices_val = data.get("devices")
+    if isinstance(devices_val, dict):
+        records = devices_val.get("records")
+        if isinstance(records, list):
+            return _from_list(records)
+
+    return [], []
 
 
 class CatLinkAPI:
@@ -251,7 +304,7 @@ class CatLinkAPI:
         """Get the list of devices."""
         rsp = self._request_with_reauth("token/device/union/list/sorted", {"type": "NONE"})
         self._check_response(rsp)
-        devices = rsp.get("data", {}).get("devices") or []
+        devices = _extract_devices(rsp.get("data") or {})
         if not any(dev.get("deviceType") == "FEEDER" for dev in devices):
             devices = self._try_expand_devices(devices)
         return devices
@@ -267,18 +320,77 @@ class CatLinkAPI:
             Expanded device list with duplicates removed.
         """
         expanded = list(devices)
-        for device_type in ("FEEDER", "ALL"):
-            try:
-                rsp = self._request_with_reauth(
-                    "token/device/union/list/sorted", {"type": device_type}
-                )
-                self._check_response(rsp)
-            except (CatLinkAPIError, httpx.HTTPError):
-                continue
-            extra = rsp.get("data", {}).get("devices") or []
+        candidates: list[tuple[str, dict | None]] = [
+            ("token/device/union/list/sorted", {"type": "FEEDER"}),
+            ("token/device/union/list/sorted", {"type": "ALL"}),
+            ("token/device/feeder/list", None),
+            ("token/device/feeder/list/sorted", None),
+            ("token/device/list", {"type": "NONE", "current": 1, "size": 100}),
+        ]
+        for api, params in candidates:
+            extra = self._fetch_device_list(api, params)
             if extra:
                 expanded = _merge_devices(expanded, extra)
         return expanded
+
+    def _fetch_device_list(self, api: str, params: dict | None = None) -> list[dict]:
+        """
+        Fetch device data from a list endpoint, expanding IDs when needed.
+
+        Args:
+            api: API path for device listing.
+            params: Optional query parameters.
+
+        Returns:
+            List of device info dictionaries.
+        """
+        try:
+            rsp = self._request_with_reauth(api, params)
+            self._check_response(rsp)
+        except (CatLinkAPIError, httpx.HTTPError):
+            return []
+        data = rsp.get("data") or {}
+        devices, ids = _extract_devices_or_ids(data)
+        if devices:
+            return devices
+        if ids:
+            return self._fetch_devices_by_ids(ids)
+        return []
+
+    def _fetch_devices_by_ids(self, device_ids: list[str]) -> list[dict]:
+        """
+        Fetch device info for a list of IDs.
+
+        Args:
+            device_ids: Device identifier list.
+
+        Returns:
+            List of device info dictionaries.
+        """
+        devices: list[dict] = []
+        for device_id in device_ids:
+            info = self._fetch_device_info(device_id)
+            if info:
+                devices.append(info)
+        return devices
+
+    def _fetch_device_info(self, device_id: str) -> dict:
+        """
+        Fetch device info for a single device ID.
+
+        Args:
+            device_id: Device identifier.
+
+        Returns:
+            Device info dictionary.
+        """
+        try:
+            rsp = self._request_with_reauth("token/device/info", {"deviceId": device_id})
+            self._check_response(rsp)
+        except (CatLinkAPIError, httpx.HTTPError):
+            return {}
+        data = rsp.get("data") or {}
+        return data.get("deviceInfo") or data
 
     def get_device_detail(self, device_id: str, device_type: str) -> dict:
         """Get detailed info for a device."""
@@ -287,6 +399,7 @@ class CatLinkAPI:
             "LITTER_BOX_599": "token/litterbox/info",
             "C08": "token/litterbox/info/c08",
             "FEEDER": "token/device/feeder/detail",
+            "PUREPRO": "token/device/purepro/detail",
         }
         api = api_map.get(device_type, "token/device/info")
         rsp = self._request_with_reauth(api, {"deviceId": device_id})
@@ -321,6 +434,7 @@ class CatLinkAPI:
             "SCOOPER": "token/device/scooper/stats/log/top5",
             "LITTER_BOX_599": "token/litterbox/stats/log/top5",
             "FEEDER": "token/device/feeder/stats/log/top5",
+            "PUREPRO": "token/device/purepro/stats/log/top5",
         }
         api = api_map.get(device_type, "token/device/union/logs")
         rsp = self._request_with_reauth(api, {"deviceId": device_id})
@@ -329,6 +443,7 @@ class CatLinkAPI:
         return (
             data.get("scooperLogTop5")
             or data.get("feederLogTop5")
+            or data.get("pureLogTop5")
             or data.get("logs")
             or data.get("list")
             or []

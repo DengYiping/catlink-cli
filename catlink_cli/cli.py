@@ -285,7 +285,7 @@ def _show_feeder_status(detail: dict) -> None:
     "device_type",
     default="SCOOPER",
     show_default=True,
-    type=click.Choice(["SCOOPER", "LITTER_BOX_599", "C08", "FEEDER"]),
+    type=click.Choice(["SCOOPER", "LITTER_BOX_599", "C08", "FEEDER", "PUREPRO"]),
     help="Device type.",
 )
 @_region_option
@@ -432,7 +432,7 @@ def action(device_id: str, action: str, device_type: str, region: str | None) ->
     "device_type",
     default="SCOOPER",
     show_default=True,
-    type=click.Choice(["SCOOPER", "LITTER_BOX_599", "FEEDER"]),
+    type=click.Choice(["SCOOPER", "LITTER_BOX_599", "FEEDER", "PUREPRO"]),
     help="Device type.",
 )
 @_region_option

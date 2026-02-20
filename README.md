@@ -93,6 +93,7 @@ Some commands require a `--type` argument. Supported values depend on the comman
 - `LITTER_BOX_599`
 - `C08` (status only)
 - `FEEDER` (status only)
+- `PUREPRO` (water fountain, status/logs)
 
 ## Commands
 
