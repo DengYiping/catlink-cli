@@ -207,3 +207,23 @@ class TestCatsCommand:
         assert result.exit_code == 0
         assert "Whiskers" in result.output
         assert "Tabby" in result.output
+
+
+class TestLogoutCommand:
+    @patch("catlink_cli.cli.clear_credentials")
+    @patch("catlink_cli.cli.clear_credentials_for_region")
+    def test_logout_region(
+        self, mock_clear_region: MagicMock, mock_clear_all: MagicMock, runner: CliRunner
+    ) -> None:
+        result = runner.invoke(cli, ["logout", "--region", "china"])
+        assert result.exit_code == 0
+        assert "china" in result.output
+        mock_clear_region.assert_called_once_with("china")
+        mock_clear_all.assert_not_called()
+
+    @patch("catlink_cli.cli.clear_credentials")
+    def test_logout_all(self, mock_clear_all: MagicMock, runner: CliRunner) -> None:
+        result = runner.invoke(cli, ["logout"])
+        assert result.exit_code == 0
+        assert "Credentials cleared." in result.output
+        mock_clear_all.assert_called_once()

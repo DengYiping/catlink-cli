@@ -517,28 +517,55 @@ def clear_credentials() -> None:
     Returns:
         None.
     """
-    keys = [
+    for region in API_SERVERS:
+        clear_credentials_for_region(region)
+    for key in (
         KEYRING_TOKEN_KEY,
         KEYRING_PHONE_KEY,
         KEYRING_IAC_KEY,
         KEYRING_API_BASE_KEY,
         KEYRING_VERIFY_KEY,
-    ]
-    for region in API_SERVERS:
-        keys.extend(
-            [
-                _region_key(KEYRING_TOKEN_KEY, region),
-                _region_key(KEYRING_PHONE_KEY, region),
-                _region_key(KEYRING_IAC_KEY, region),
-                _region_key(KEYRING_API_BASE_KEY, region),
-                _region_key(KEYRING_VERIFY_KEY, region),
-            ]
-        )
-    for key in keys:
+    ):
         try:
             keyring.delete_password(KEYRING_SERVICE, key)
         except keyring.errors.PasswordDeleteError:
             pass
+
+
+def clear_credentials_for_region(region: str) -> None:
+    """
+    Remove stored credentials for a specific region.
+
+    Args:
+        region: Region identifier to clear.
+
+    Returns:
+        None.
+    """
+    for key in (
+        _region_key(KEYRING_TOKEN_KEY, region),
+        _region_key(KEYRING_PHONE_KEY, region),
+        _region_key(KEYRING_IAC_KEY, region),
+        _region_key(KEYRING_API_BASE_KEY, region),
+        _region_key(KEYRING_VERIFY_KEY, region),
+    ):
+        try:
+            keyring.delete_password(KEYRING_SERVICE, key)
+        except keyring.errors.PasswordDeleteError:
+            pass
+    api_base = keyring.get_password(KEYRING_SERVICE, KEYRING_API_BASE_KEY)
+    if api_base and _region_from_api_base(api_base) == region:
+        for key in (
+            KEYRING_TOKEN_KEY,
+            KEYRING_PHONE_KEY,
+            KEYRING_IAC_KEY,
+            KEYRING_API_BASE_KEY,
+            KEYRING_VERIFY_KEY,
+        ):
+            try:
+                keyring.delete_password(KEYRING_SERVICE, key)
+            except keyring.errors.PasswordDeleteError:
+                pass
 
 
 def get_system_timezone() -> str:

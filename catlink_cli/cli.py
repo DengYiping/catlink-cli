@@ -11,6 +11,7 @@ from .api import (
     CatLinkAPI,
     CatLinkAPIError,
     clear_credentials,
+    clear_credentials_for_region,
     get_authenticated_clients,
     get_system_timezone,
     save_credentials,
@@ -146,10 +147,20 @@ def login(phone: str, iac: str, password: str, region: str, no_verify: bool) -> 
 
 
 @cli.command()
-def logout() -> None:
+@click.option(
+    "--region",
+    type=click.Choice(_REGION_CHOICES),
+    default=None,
+    help="Clear stored credentials for this region only.",
+)
+def logout(region: str | None) -> None:
     """Clear stored credentials."""
-    clear_credentials()
-    click.echo("Credentials cleared.")
+    if region:
+        clear_credentials_for_region(region)
+        click.echo(f"Credentials cleared for region {region}.")
+    else:
+        clear_credentials()
+        click.echo("Credentials cleared.")
 
 
 @cli.command("devices")
