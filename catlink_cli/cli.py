@@ -109,6 +109,83 @@ def list_devices() -> None:
         client.close()
 
 
+def _show_litter_box_status(detail: dict, device_type: str) -> None:
+    work_status = detail.get("workStatus", "")
+    state = WORK_STATUSES.get(str(work_status).strip(), work_status)
+    mode_code = detail.get("workModel", "")
+    modes = DEVICE_MODES.get(device_type, {})
+    mode = modes.get(mode_code, mode_code)
+
+    click.echo(f"State:             {state}")
+    click.echo(f"Mode:              {mode}")
+
+    litter_weight = detail.get("catLitterWeight")
+    if litter_weight is not None:
+        click.echo(f"Litter weight:     {litter_weight} kg")
+
+    countdown = detail.get("litterCountdown")
+    if countdown is not None:
+        click.echo(f"Litter remaining:  {countdown} days")
+
+    induction = int(detail.get("inductionTimes", 0))
+    manual = int(detail.get("manualTimes", 0))
+    click.echo(f"Total cleans:      {induction + manual}")
+    click.echo(f"Manual cleans:     {manual}")
+
+    deodorant = detail.get("deodorantCountdown")
+    if deodorant is not None:
+        click.echo(f"Deodorant days:    {deodorant}")
+
+    temp = detail.get("temperature")
+    if temp is not None and temp != "-":
+        click.echo(f"Temperature:       {temp} C")
+    humidity = detail.get("humidity")
+    if humidity is not None and humidity != "-":
+        click.echo(f"Humidity:          {humidity}%")
+
+    error = detail.get("currentMessage") or detail.get("currentError")
+    if error:
+        click.echo(f"Error:             {error}")
+
+
+def _show_feeder_status(detail: dict) -> None:
+    food_out = detail.get("foodOutStatus", "")
+    if food_out:
+        click.echo(f"Food out status:   {food_out}")
+
+    weight = detail.get("weight")
+    if weight is not None:
+        click.echo(f"Food weight:       {weight} g")
+
+    auto_fill = detail.get("autoFillStatus", "")
+    if auto_fill:
+        click.echo(f"Auto-fill:         {auto_fill}")
+
+    power = detail.get("powerSupplyStatus", "")
+    if power:
+        click.echo(f"Power supply:      {power}")
+
+    key_lock = detail.get("keyLockStatus", "")
+    if key_lock:
+        click.echo(f"Key lock:          {key_lock}")
+
+    indicator = detail.get("indicatorLightStatus", "")
+    if indicator:
+        click.echo(f"Indicator light:   {indicator}")
+
+    breath = detail.get("breathLightStatus", "")
+    if breath:
+        click.echo(f"Breath light:      {breath}")
+
+    firmware = detail.get("firmwareVersion", "")
+    if firmware:
+        click.echo(f"Firmware:          {firmware}")
+
+    error = detail.get("currentErrorMessage") or detail.get("error") or detail.get("currentMessage")
+    if error:
+        click.echo(f"Error:             {error}")
+
+
 @cli.command()
 @click.argument("device_id")
 @click.option(
@@ -128,43 +205,12 @@ def status(device_id: str, device_type: str) -> None:
             click.echo("No detail returned for this device.")
             return
 
-        work_status = detail.get("workStatus", "")
-        state = WORK_STATUSES.get(str(work_status).strip(), work_status)
-        mode_code = detail.get("workModel", "")
-        modes = DEVICE_MODES.get(device_type, {})
-        mode = modes.get(mode_code, mode_code)
-
-        click.echo(f"State:             {state}")
-        click.echo(f"Mode:              {mode}")
         click.echo(f"Online:            {detail.get('online', '?')}")
 
-        litter_weight = detail.get("catLitterWeight")
-        if litter_weight is not None:
-            click.echo(f"Litter weight:     {litter_weight} kg")
-
-        countdown = detail.get("litterCountdown")
-        if countdown is not None:
-            click.echo(f"Litter remaining:  {countdown} days")
-
-        induction = int(detail.get("inductionTimes", 0))
-        manual = int(detail.get("manualTimes", 0))
-        click.echo(f"Total cleans:      {induction + manual}")
-        click.echo(f"Manual cleans:     {manual}")
-
-        deodorant = detail.get("deodorantCountdown")
-        if deodorant is not None:
-            click.echo(f"Deodorant days:    {deodorant}")
-
-        temp = detail.get("temperature")
-        if temp is not None and temp != "-":
-            click.echo(f"Temperature:       {temp} C")
-        humidity = detail.get("humidity")
-        if humidity is not None and humidity != "-":
-            click.echo(f"Humidity:          {humidity}%")
-
-        error = detail.get("currentMessage") or detail.get("currentError")
-        if error:
-            click.echo(f"Error:             {error}")
+        if device_type == "FEEDER":
+            _show_feeder_status(detail)
+        else:
+            _show_litter_box_status(detail, device_type)
 
     except CatLinkAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
@@ -250,7 +296,7 @@ def action(device_id: str, action: str, device_type: str) -> None:
     "device_type",
     default="SCOOPER",
     show_default=True,
-    type=click.Choice(["SCOOPER", "LITTER_BOX_599"]),
+    type=click.Choice(["SCOOPER", "LITTER_BOX_599", "FEEDER"]),
     help="Device type.",
 )
 def logs(device_id: str, device_type: str) -> None:
@@ -264,7 +310,12 @@ def logs(device_id: str, device_type: str) -> None:
         for entry in entries:
             ts = entry.get("time") or entry.get("createTime") or ""
             event = entry.get("event") or entry.get("msg") or str(entry)
-            click.echo(f"  [{ts}] {event}")
+            parts = [event]
+            for extra in ("firstSection", "secondSection"):
+                val = entry.get(extra)
+                if val:
+                    parts.append(str(val))
+            click.echo(f"  [{ts}] {' '.join(parts)}")
     except CatLinkAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
         sys.exit(1)
@@ -321,6 +372,28 @@ def pause(device_id: str, device_type: str) -> None:
     try:
         client.send_action(device_id, "00", device_type)
         click.echo("Device paused.")
+    except CatLinkAPIError as exc:
+        click.echo(f"Error: {exc}", err=True)
+        sys.exit(1)
+    finally:
+        client.close()
+
+
+@cli.command("feed")
+@click.argument("device_id")
+@click.option(
+    "--portions",
+    default=5,
+    show_default=True,
+    type=click.IntRange(1, 10),
+    help="Number of portions to dispense (1-10).",
+)
+def feed(device_id: str, portions: int) -> None:
+    """Dispense food from a feeder."""
+    client = get_authenticated_client()
+    try:
+        client.food_out(device_id, portions)
+        click.echo(f"Dispensing {portions} portion(s).")
     except CatLinkAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
         sys.exit(1)
